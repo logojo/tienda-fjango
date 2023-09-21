@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load  static %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block js %}
+
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.1.0/firebase-auth-compat.js"></script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+   const firebaseApp = firebase.initializeApp({ 
+        apiKey: "AIzaSyC-DEHKZmVD4F2kUj6gp4leYq14kIzgna4",
+        authDomain: "django-pro-342d2.firebaseapp.com",
+        projectId: "django-pro-342d2",
+        storageBucket: "django-pro-342d2.appspot.com",
+        messagingSenderId: "422422917707",
+        appId: "1:422422917707:web:72bdca2dbb9dabdb5593ce"
+    });
+   const db = firebaseApp.firestore();
+   const auth = firebaseApp.auth();
+</script>
+
+<script>
+    function loginGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+
+        firebase.auth()
+            .signInWithPopup(provider)
+            .then((result) => {
+                /** @type { firebase.auth.OAuthCredentials } */
+                const credential = result.credential;
+                const token = credential.idToken;
+                const user = result.user;
+                
+                user.getIdToken().then(
+                    function(idToken) {
+                        //console.log(idToken);
+                       let data = {'token': idToken }
+                       axios.post('/api/login', data)
+                            .then(function(response) {
+                                console.log('response:', response);
+                            });
+                    }).catch(function(error){
+                        console.log(error);
+                    }
+                )
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                const email = error.email;
+                const credential = error.credential;
+                console.log('error: ', error);
+            });
+    }
+</script>
+
+{% endblock js %}
