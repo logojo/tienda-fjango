@@ -6,6 +6,7 @@ from model_utils.models import TimeStampedModel
 
 # local apps
 from applications.producto.models import Product
+from .managers import SaleDetailManager
 
 
 class Sale(TimeStampedModel):
@@ -104,6 +105,8 @@ class SaleDetail(TimeStampedModel):
     )
     anulate = models.BooleanField(default=False)
     #
+    
+    objects = SaleDetailManager()
 
     class Meta:
         verbose_name = 'Detalle Venta'

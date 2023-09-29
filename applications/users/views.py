@@ -11,7 +11,7 @@ from django.views.generic import TemplateView
 from .serializers import LoginSocialSerializer
 from .models import User
 
-#esta solo es un ejemplo de logue con google
+#esta solo es un ejemplo de logueo con google
 class Login(TemplateView):
     template_name = "users/login.html"
 
@@ -36,15 +36,15 @@ class GoogleLogin(APIView):
         # se instala pip install firebase-admin
 
         #auth provide del paquete firebase_admin 
-        decoded_toke = auth.verify_id_token(token)
+        decoded_token = auth.verify_id_token(token)
         #extrayendo datos del token desencriptado
-        email = decoded_toke['email']
-        name = decoded_toke['name']
-        avatar = decoded_toke['picture']
-        verified = decoded_toke['email_verified']
+        email = decoded_token['email']
+        name = decoded_token['name']
+        avatar = decoded_token['picture']
+        verified = decoded_token['email_verified']
 
 
-        #creado usuario en bd local una vez verificado el acceso en google
+        #creado o obteniendo usuario en bd local una vez verificado el acceso en google
         usuario, created = User.objects.get_or_create(
             email = email,
             defaults = {
@@ -53,6 +53,8 @@ class GoogleLogin(APIView):
                 'is_active': True
             }
         )
+
+        #
 
         #crear token interno 
         if created:

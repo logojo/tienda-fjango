@@ -41,8 +41,8 @@
                 
                 user.getIdToken().then(
                     function(idToken) {
-                        //console.log(idToken);
-                       let data = {'token': idToken }
+                        console.log(idToken);
+                       let data = {token: idToken }
                        axios.post('/api/login', data)
                             .then(function(response) {
                                 console.log('response:', response);
